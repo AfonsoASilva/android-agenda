@@ -8,13 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import br.com.afonso.agenda.controller.FormularioHelper;
+import br.com.afonso.agenda.dao.AlunoDAO;
+import br.com.afonso.agenda.modelo.Aluno;
+
 public class FormularioActivity extends AppCompatActivity {
+
+    private FormularioHelper formularioHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
-
     }
 
     @Override
@@ -35,7 +40,13 @@ public class FormularioActivity extends AppCompatActivity {
     }
 
     private void salvar() {
+        this.formularioHelper = new FormularioHelper(this);
+        Aluno aluno = this.formularioHelper.GetAluno();
+        AlunoDAO alunoDAO = new AlunoDAO(this);
+        alunoDAO.insert(aluno);
+        alunoDAO.close();
+        String mensagem = "Aluno "+aluno.getNome()+" Salvo!";
         finish();
-        Toast.makeText(FormularioActivity.this, "Salvo!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(FormularioActivity.this, mensagem, Toast.LENGTH_SHORT).show();
     }
 }
